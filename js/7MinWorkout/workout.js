@@ -46,7 +46,15 @@ var startExercise = function (exercisePlan) {
 	$scope.currentExerciseDuration = 0;
 	$interval(function () {
 		$scope.currentExerciseDuration = $scope.currentExerciseDuration + 1;
-	}, 1000, $scope.currentExercise.duration);
+	}, 1000, $scope.currentExercise.duration)
+	.then(function(){
+		var next = getNextExercise(exercisePlan);
+		if(next){
+			startExercise(next);
+		}else{
+			console.log("Workout complete")
+		}
+	});
 };
 
 
@@ -62,7 +70,7 @@ var startExercise = function (exercisePlan) {
 		}
 	});
 
-	
+
 var getNextExercise = function (currentExercisePlan) {
 	//it take the current Exercise and determine what the next exercise should be
 	var nextExercise = null;
