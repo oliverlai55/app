@@ -58,17 +58,17 @@ var startExercise = function (exercisePlan) {
 };
 
 
-//this adds the $watch to track currentExerciseDuration
-	$scope.$watch('currentExerciseDuration', function (nVal){
-		if(nVal == $scope.currentExercise.duration){
-			var next = getNextExercise($scope.currentExercise);
-				if(next){
-					startExercise(next);
-				}else{
-					console.log("Workout complete")
-				}
-		}
-	});
+// //this adds the $watch to track currentExerciseDuration
+// 	$scope.$watch('currentExerciseDuration', function (nVal){
+// 		if(nVal == $scope.currentExercise.duration){
+// 			var next = getNextExercise($scope.currentExercise);
+// 				if(next){
+// 					startExercise(next);
+// 				}else{
+// 					console.log("Workout complete")
+// 				}
+// 		}
+// 	});
 
 
 var getNextExercise = function (currentExercisePlan) {
