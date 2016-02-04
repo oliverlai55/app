@@ -2,17 +2,8 @@ angular.module('7minWorkout')
 	.controller('WorkoutController', [ '$scope', '$interval', function ($scope, $interval){
 //gets existing module
 
-	$scope.$watch('currentExerciseDuration', function (nVal){
-		if(nVal == $scope.currentExercise.duration){
-			var next = getNextExercise($scope.currentExercise);
-				if(next){
-					startExercise(next);
-				}else{
-					console.log("Workout complete")
-				}
-		}
-	});
-	
+
+
 	function WorkoutPlan(args){
 		this.exercises = [];
 		this.name = args.name;
@@ -58,6 +49,20 @@ var startExercise = function (exercisePlan) {
 	}, 1000, $scope.currentExercise.duration);
 };
 
+
+//this adds the $watch to track currentExerciseDuration
+	$scope.$watch('currentExerciseDuration', function (nVal){
+		if(nVal == $scope.currentExercise.duration){
+			var next = getNextExercise($scope.currentExercise);
+				if(next){
+					startExercise(next);
+				}else{
+					console.log("Workout complete")
+				}
+		}
+	});
+
+	
 var getNextExercise = function (currentExercisePlan) {
 	//it take the current Exercise and determine what the next exercise should be
 	var nextExercise = null;
