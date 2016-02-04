@@ -2,6 +2,17 @@ angular.module('7minWorkout')
 	.controller('WorkoutController', [ '$scope', '$interval', function ($scope, $interval){
 //gets existing module
 
+	$scope.$watch('currentExerciseDuration', function (nVal){
+		if(nVal == $scope.currentExercise.duration){
+			var next = getNextExercise($scope.currentExercise);
+				if(next){
+					startExercise(next);
+				}else{
+					console.log("Workout complete")
+				}
+		}
+	});
+	
 	function WorkoutPlan(args){
 		this.exercises = [];
 		this.name = args.name;
