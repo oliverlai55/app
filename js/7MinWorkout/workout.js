@@ -47,6 +47,19 @@ var startExercise = function (exercisePlan) {
 	}, 1000, $scope.currentExercise.duration);
 };
 
+var getNextExercise = function (currentExercisePlan) {
+	//it take the current Exercise and determine what the next exercise should be
+	var nextExercise = null;
+	if(currentExercisePlan === restExercise){
+		nextExercise = workoutPlan.exercises.shift();
+	}else{
+		if(workoutPlan.exercises.length != 0){
+			nextExercise = restExercise;
+		}
+	}
+	return nextExercise;
+};
+
 var createWorkout = function () {
 	var workout = new WorkoutPlan({
 		name: "7minWorkout",
