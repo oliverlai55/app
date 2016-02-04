@@ -1,3 +1,19 @@
 angular.module('app',['ngRoute', '7minWorkout']);
+
+config(function ($routeProvider){
+	$routeProvider.when('/start', {
+		templateUrl: 'partials/start.html'
+	});
+	$routeProvider.when('/workout' {
+		templateUrl: 'partials/workout.html'
+		controller: 'WorkoutController'
+	});
+	$routeProvider.when('/finish', {
+		templateUrl: 'partials/finish.html'
+	});
+	$routeProvider.otherwise({
+		redirectTo: '/start'
+	});
+});
 //creates new modules
 angular.module('7minWorkout',[]);
