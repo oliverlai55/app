@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app',['ngRoute', '7minWorkout']).
+angular.module('app',['ngRoute', 'ngSanitize', '7minWorkout']).
 //the sceDelegrateProvider makes youtube able to inject videos as trustworthy source.
 config(function ($routeProvider, $sceDelegateProvider){
 	$routeProvider.when('/start', {
