@@ -24,4 +24,8 @@ angular.module('7minWorkout')
 				currentWorkoutLog.endedOn = new Date().toISOString();
 				currentWorkoutLog = null;
 			};
+
+			service.getHistory = function(){
+				return workoutHistory;
+			}
 	}]);
