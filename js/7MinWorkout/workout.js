@@ -99,7 +99,12 @@ angular.module('7minWorkout')
         }
       }
 
-
+      $scope.onKeyPressed = function(event){
+        if(event.which == 80 || event.which == 112){
+          $scope.pauseResumeToggle();
+        }
+      };
+      
       var getNextExercise = function (currentExercisePlan) {
           var nextExercise = null;
           if (currentExercisePlan === restExercise) {
@@ -366,19 +371,17 @@ angular.module('7minWorkout')
           $scope.aboutToCompleteAudio.pause();
         }else{
           $scope.ticksAudio.play();
-          if($scope.halfWayAudio.currentTime > 0 && $scope.halfWayAudio.currentTime < $scope.halfWayAudio.duration)
+          if($scope.halfWayAudio.currentTime > 0 && 
+            $scope.halfWayAudio.currentTime < $scope.halfWayAudio.duration)
             $scope.halfWayAudio.play();
 
-            if($scope.aboutToCompleteAudio.currentTime > 0 && $scope.aboutToCompleteAudio.currentTime < $scope.aboutToCompleteAudio.duration)
-              $scope.aboutToCompleteAudio.play();
+          if($scope.aboutToCompleteAudio.currentTime > 0 && 
+            $scope.aboutToCompleteAudio.currentTime < $scope.aboutToCompleteAudio.duration)
+            $scope.aboutToCompleteAudio.play();
           }
       });
 
-      $scope.onKeyPressed = function(event){
-        if(event.which == 80 || event.which == 112){
-          $scope.pauseResumeToggle();
-        }
-      };
+
 
       var init = function () {
       }
