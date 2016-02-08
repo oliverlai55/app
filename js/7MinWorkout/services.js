@@ -28,4 +28,10 @@ angular.module('7minWorkout')
 			service.getHistory = function(){
 				return workoutHistory;
 			}
+
+			$rootScope.$on("$routeChangeSuccess", function (e, args){
+				if(currentWorkoutLog){
+					service.endTracking(false);
+				}
+			});
 	}]);
