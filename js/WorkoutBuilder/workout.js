@@ -97,6 +97,7 @@ angular.module('WorkoutBuilder')
       };
       var init = function () {
           $scope.workout = selectedWorkout;
+          //resolved workout
       };
       init();
   }]);

@@ -51,6 +51,7 @@ config(function ($routeProvider, $sceDelegateProvider) {
                 //the params object has all values for all placeholder tokens in that route
                 //the one id we need is the one token id of the workout edit route
                 if (!workout) {
+                    //using resolve, if the workout is not found, it will redirect to builder/workouts
                     $location.path('/builder/workouts');    //If the workout not found redirect to workout list
                 }
                 return workout;
