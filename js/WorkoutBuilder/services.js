@@ -12,12 +12,16 @@ angular.module('WorkoutBuilder')
         var service = {};
         var buildingWorkout;
         var newWorkout;
+         //tracking function is to set up a WorkoutPlan Object
+            //this allows the views to manipulate the workout details
         service.startBuilding = function (name) {
             //We are going to edit an existing workout
+            //takes workoutname as param
             if (name) {
                 buildingWorkout = WorkoutService.getWorkout(name);
                 newWorkout = false;
             }
+            //creating new workout
             else {
                 buildingWorkout = new WorkoutPlan({});
                 newWorkout = true;

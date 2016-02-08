@@ -4,6 +4,7 @@ angular.module('WorkoutBuilder')
   .controller('ExercisesNavController', ['$scope', 'WorkoutService', 'WorkoutBuilderService', function ($scope, WorkoutService, WorkoutBuilderService) {
       $scope.addExercise = function (exercise) {
           WorkoutBuilderService.addExercise(exercise);
+          //this updates the buildingWorkout model data with new exercise.
       }
       var init = function () {
           $scope.exercises = WorkoutService.getExercises();
