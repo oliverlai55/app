@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('7minWorkout')
-  .controller('WorkoutController', ['$scope', '$interval', '$location', '$timeout', 'workoutHistoryTracker' function ($scope, $interval, $location, $timeout, workoutHistoryTracker) {
+  .controller('WorkoutController', ['$scope', '$interval', '$location', 'workoutHistoryTracker', function ($scope, $interval, $location, workoutHistoryTracker) {
       function WorkoutPlan(args) {
           this.exercises = [];
           this.name = args.name;
@@ -44,7 +44,6 @@ angular.module('7minWorkout')
               }),
               duration: $scope.workoutPlan.restBetweenExercise
           };
-
           workoutHistoryTracker.startTracking();
           $scope.currentExerciseIndex = -1;
           startExercise($scope.workoutPlan.exercises[0]);
@@ -91,7 +90,7 @@ angular.module('7minWorkout')
           else {
               $scope.pauseWorkout();
           }
-      };
+      }
 
       var startExerciseTimeTracking = function () {
           var promise = $interval(function () {
@@ -111,13 +110,13 @@ angular.module('7minWorkout')
               console.log('Inteval promise cancelled. Error reason -' + error);
           });
           return promise;
-      };
+      }
 
-      var workoutComplete = function(){
-        workoutHistoryTracker.endTracking(true);
-        $location.path('/finish');
-      };
-      
+      var workoutComplete = function () {
+          workoutHistoryTracker.endTracking(true);
+          $location.path('/finish');
+      }
+
       $scope.onKeyPressed = function (event) {
           if (event.which == 80 || event.which == 112) {        // 'p' or 'P' key to toggle pause and resume.
               $scope.pauseResumeToggle();
