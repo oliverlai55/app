@@ -8,6 +8,7 @@ config(function ($routeProvider, $sceDelegateProvider) {
 
     $routeProvider.when('/builder', {
         redirectTo: '/builder/workouts'
+        //landing page for Trainer App, lists all avail. workout
     });
     $routeProvider.when('/builder/workouts', {
         templateUrl: 'partials/workoutbuilder/workouts.html',

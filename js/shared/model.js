@@ -1,6 +1,7 @@
 ﻿'use strict';
 
 /* Model classes */
+//This is the service shared between the two apps.
 angular.module('app')
     .factory('Exercise', function () {
         function Exercise(args) {
@@ -14,6 +15,7 @@ angular.module('app')
             this.procedure = args.procedure;
         }
         return Exercise;
+        //returning a constructor function reference
     });
 
 angular.module('app')
