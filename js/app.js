@@ -29,7 +29,10 @@ config(function ($routeProvider, $sceDelegateProvider) {
         leftNav: 'partials/workoutbuilder/left-nav-exercises.html',
         topNav: 'partials/workoutbuilder/top-nav.html',
         controller: 'WorkoutDetailController',
+        //resolve is part of the route configuration object
+        //it provides a way to pass data and services to a specfic controller
         resolve: {
+            //this points to the startBuilding function in service.js
             selectedWorkout: ['WorkoutBuilderService', function (WorkoutBuilderService) {
                 return WorkoutBuilderService.startBuilding();
             }],
@@ -44,6 +47,9 @@ config(function ($routeProvider, $sceDelegateProvider) {
         resolve: {
             selectedWorkout: ['WorkoutBuilderService', '$route', '$location', function (WorkoutBuilderService, $route, $location) {
                 var workout = WorkoutBuilderService.startBuilding($route.current.params.id);
+                //$route.current property has all details about the current route.
+                //the params object has all values for all placeholder tokens in that route
+                //the one id we need is the one token id of the workout edit route
                 if (!workout) {
                     $location.path('/builder/workouts');    //If the workout not found redirect to workout list
                 }

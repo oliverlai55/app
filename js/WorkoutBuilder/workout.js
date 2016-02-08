@@ -12,6 +12,7 @@ angular.module('WorkoutBuilder')
   }]);
 
 angular.module('WorkoutBuilder')
+//manages workout, creating, editing, viewing the workout
   .controller('WorkoutDetailController', ['$scope', 'WorkoutBuilderService', 'selectedWorkout', '$location', '$routeParams', function ($scope, WorkoutBuilderService, selectedWorkout, $location, $routeParams) {
       $scope.removeExercise = function (exercise) {
           WorkoutBuilderService.removeExercise(exercise);
