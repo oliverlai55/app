@@ -1,1 +1,3 @@
-directives.js
+﻿'use strict';
+
+/* Directives */

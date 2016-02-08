@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('7minWorkout')
-  .controller('WorkoutController', ['$scope', '$interval', '$location', 'workoutHistoryTracker', function ($scope, $interval, $location, workoutHistoryTracker) {
+  .controller('WorkoutController', ['$scope', '$interval', '$location', 'workoutHistoryTracker', 'appEvents', function ($scope, $interval, $location, workoutHistoryTracker, appEvents) {
       function WorkoutPlan(args) {
           this.exercises = [];
           this.name = args.name;
@@ -55,9 +55,8 @@ angular.module('7minWorkout')
 
           if (exercisePlan.details.name != 'rest') {
               $scope.currentExerciseIndex++;
-              $scope.$emit("event:workout:exerciseStarted", exercisePlan.details);
+              $scope.$emit(appEvents.workout.exerciseStarted, exercisePlan.details);
           }
-
           exerciseIntervalPromise = startExerciseTimeTracking();
       };
 
@@ -113,16 +112,17 @@ angular.module('7minWorkout')
           return promise;
       }
 
-      var workoutComplete = function () {
-          workoutHistoryTracker.endTracking(true);
-          $location.path('/finish');
-      }
-
       $scope.onKeyPressed = function (event) {
           if (event.which == 80 || event.which == 112) {        // 'p' or 'P' key to toggle pause and resume.
               $scope.pauseResumeToggle();
           }
       };
+
+      var workoutComplete = function () {
+          workoutHistoryTracker.endTracking(true);
+          $location.path('/finish');
+      }
+
 
       //$scope.$watch('currentExerciseDuration', function (nVal) {
       //    if (nVal == $scope.currentExercise.duration) {

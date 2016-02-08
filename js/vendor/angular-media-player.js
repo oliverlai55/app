@@ -1,1 +1,511 @@
-angular.module("mediaPlayer",["mediaPlayer.helpers"]).value("mp.throttleSettings",{enabled:!0,time:1e3}).constant("mp.playerDefaults",{currentTrack:0,ended:void 0,network:void 0,playing:!1,seeking:!1,tracks:0,volume:1,formatDuration:"00:00",formatTime:"00:00",loadPercent:0}).directive("mediaPlayer",["$rootScope","$interpolate","$timeout","mp.throttle","mp.playerDefaults","mp.throttleSettings",function(a,b,c,d,e,f){function g(a){return function(b,d){var e,f=null;if(a.$attachPlaylist(b),void 0===b&&void 0!==d)return a.pause();if(a.currentTrack){e=d?d[a.currentTrack-1]:-1;for(var g=0;g<b.length;g++)if(angular.equals(b[g],e)){f=g;break}null!==f?(a.currentTrack=f+1,a.tracks=b.length):(a.pause(),b.length?c(function(){a.$clearSourceList(),a.$addSourceList(b[0]),a.load(),a.tracks=b.length}):a.reset())}else b.length?(a.$clearSourceList(),a.$addSourceList(b[0]),a.load(),a.tracks=b.length):a.reset()}}var h={load:function(a,b){"boolean"==typeof a?(b=a,a=null):"object"==typeof a&&(this.$clearSourceList(),this.$addSourceList(a)),this.$domEl.load(),this.ended=void 0,b&&this.$element.one("canplay",this.play.bind(this))},reset:function(a){angular.extend(this,e),this.$clearSourceList(),this.load(this.$playlist,a)},play:function(a,b){return"boolean"==typeof a&&(b=a,a=void 0),b?this.$selective=!0:0==b&&(this.$selective=!1),this.$playlist.length>a?(this.currentTrack=a+1,this.load(this.$playlist[a],!0)):(!this.currentTrack&&this.$domEl.readyState&&this.currentTrack++,void(this.ended?this.load(!0):this.$domEl.play()))},playPause:function(a,b){"boolean"==typeof a&&(b=a,a=void 0),b?this.$selective=!0:0==b&&(this.$selective=!1),"number"==typeof a&&a+1!==this.currentTrack?this.play(a):this.playing?this.pause():this.play()},pause:function(){this.$domEl.pause()},stop:function(){this.reset()},toggleMute:function(){this.muted=this.$domEl.muted=!this.$domEl.muted},next:function(a){var b=this;if(b.currentTrack&&b.currentTrack<b.tracks){var d=a||b.playing;b.pause(),c(function(){b.$clearSourceList(),b.$addSourceList(b.$playlist[b.currentTrack]),b.load(d),b.currentTrack++})}},prev:function(a){var b=this;if(b.currentTrack&&b.currentTrack-1){var d=a||b.playing;b.pause(),c(function(){b.$clearSourceList(),b.$addSourceList(b.$playlist[b.currentTrack-2]),b.load(d),b.currentTrack--})}},setPlaybackRate:function(a){this.$domEl.playbackRate=a},setVolume:function(a){this.$domEl.volume=a},seek:function(a){var b,c=0;return"string"!=typeof a?this.$domEl.currentTime=a:(b=a.split(":"),c+=parseInt(b.pop(),10),b.length&&(c+=60*parseInt(b.pop(),10)),b.length&&(c+=3600*parseInt(b.pop(),10)),isNaN(c)?void 0:this.$domEl.currentTime=c)},on:function(a,b){return this.$element.on(a,b)},off:function(a,b){return this.$element.off(a,b)},one:function(a,b){return this.$element.one(a,b)},$addSourceList:function(a){var b=this;if(angular.isArray(a))angular.forEach(a,function(a){var c=document.createElement("SOURCE");["src","type","media"].forEach(function(b){void 0!==a[b]&&c.setAttribute(b,a[b])}),b.$element.append(c)});else if(angular.isObject(a)){var c=document.createElement("SOURCE");["src","type","media"].forEach(function(b){void 0!==a[b]&&c.setAttribute(b,a[b])}),b.$element.append(c)}},$clearSourceList:function(){this.$element.contents().remove()},$formatTime:function(a){if(1/0===a)return"∞";var b,c=parseInt(a/3600,10)%24,d=parseInt(a/60,10)%60,e=parseInt(a%60,10),f=(10>d?"0"+d:d)+":"+(10>e?"0"+e:e);return b=c>0?(10>c?"0"+c:c)+":"+f:f},$attachPlaylist:function(a){void 0===a||null===a?this.playlist=[]:this.$playlist=a}},i=function(a,b,c){var e={playing:function(){a.$apply(function(a){a.playing=!0,a.ended=!1})},pause:function(){a.$apply(function(a){a.playing=!1})},ended:function(){!a.$selective&&a.currentTrack<a.tracks?a.next(!0):a.$apply(function(a){a.ended=!0,a.playing=!1})},timeupdate:function(){a.$apply(function(a){a.currentTime=b.currentTime,a.formatTime=a.$formatTime(a.currentTime)})},loadedmetadata:function(){a.$apply(function(a){a.currentTrack||a.currentTrack++,a.duration=b.duration,a.formatDuration=a.$formatTime(a.duration),b.buffered.length&&(a.loadPercent=Math.round(b.buffered.end(b.buffered.length-1)/a.duration*100))})},progress:function(){a.$domEl.buffered.length&&a.$apply(function(a){a.loadPercent=Math.round(b.buffered.end(b.buffered.length-1)/a.duration*100),a.network="progress"})},volumechange:function(){a.$apply(function(a){a.volume=b.volume,a.muted=b.muted})},seeked:function(){a.$apply(function(a){a.seeking=!1})},seeking:function(){a.$apply(function(a){a.seeking=!0})},ratechange:function(){a.$apply(function(a){a.playbackRate=b.playbackRate})},stalled:function(){a.$apply(function(a){a.network="stalled"})},suspend:function(){a.$apply(function(a){a.network="suspend"})}};f.enabled&&(e.timeupdate=d(f.time,!1,e.timeupdate)),angular.forEach(e,function(a,b){c.on(b,a)})},j=function(b){var c=angular.extend(a.$new(!0),{$element:b,$domEl:b[0],$playlist:void 0,buffered:b[0].buffered,played:b[0].played,seekable:b[0].seekable},e,h);return i(c,b[0],b),c};return{scope:!1,link:function(a,b,c){var d=c.playlist,e=c.mediaPlayer||c.playerControl,f=new j(b),h=a[d];if(h=void 0===d?[]:void 0===a[d]?a[d]=[]:a[d],void 0!==e&&(a[e]=f),"AUDIO"!==b[0].tagName&&"VIDEO"!==b[0].tagName)return new Error("player directive works only when attached to an <audio>/<video> type tag");var i=[],k=b.find("source");1===k.length?h.unshift({src:k[0].src,type:k[0].type,media:k[0].media}):k.length>1&&(angular.forEach(k,function(a){i.push({src:a.src,type:a.type,media:a.media})}),h.unshift(i)),void 0===d?f.$attachPlaylist(h):h.length?(g(f)(h,void 0,a),a.$watch(d,g(f),!0)):a.$watch(d,g(f),!0)}}}]),angular.module("mediaPlayer.helpers",[]).factory("mp.throttle",["$timeout",function(a){return function(b,c,d,e){var f,g=0;"boolean"!=typeof c&&(e=d,d=c,c=void 0);var h=function(){var h=this,i=+new Date-g,j=arguments,k=function(){g=+new Date,d.apply(h,j)},l=function(){f=void 0};e&&!f&&k(),f&&a.cancel(f),void 0===e&&i>b?k():c!==!0&&(f=a(e?l:k,void 0===e?b-i:b))};return h}}]);
+/**
+ * MDN references for hackers:
+ * ===========================
+ * Media events on <audio> and <video> tags:
+ * https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Media_events
+ * Properties and Methods:
+ * https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement
+ * Internet Exploder version:
+ * http://msdn.microsoft.com/en-us/library/ff975061(v=vs.85).aspx
+ *
+ * Understanding TimeRanges objects:
+ * http://html5doctor.com/html5-audio-the-state-of-play/
+ */
+angular.module('mediaPlayer', ['mediaPlayer.helpers'])
+.constant('playerDefaults', {
+  // general properties
+  currentTrack: 0,
+  ended: undefined,
+  network: undefined,
+  playing: false,
+  seeking: false,
+  tracks: 0,
+  volume: 1,
+
+  // formatted properties
+  formatDuration: '00:00',
+  formatTime: '00:00',
+  loadPercent: 0
+})
+
+.directive('mediaPlayer', ['$rootScope', '$interpolate', '$timeout', 'throttle', 'playerDefaults',
+  function ($rootScope, $interpolate, $timeout, throttle, playerDefaults) {
+
+    var playerMethods = {
+      /**
+       * @usage load([mediaElement], [autoplay]);
+       *
+       * @param  {mediaElement Obj} mediaElement a single mediaElement, may contain multiple <source>(s)
+       * @param  {boolean} autoplay: flag to autostart loaded element
+       */
+      load: function (mediaElement, autoplay) {
+        // method overloading
+        if (typeof mediaElement === 'boolean') {
+          autoplay = mediaElement;
+          mediaElement = null;
+        } else if (typeof mediaElement === 'object') {
+          this.$clearSourceList();
+          this.$addSourceList(mediaElement);
+        }
+        this.$domEl.load();
+        this.ended = undefined;
+        if (autoplay) {
+          this.$element.one('canplay', this.play.bind(this));
+        }
+      },
+      /**
+       * resets the player (clear the <source>s) and reloads the playlist
+       *
+       * @usage reset([autoplay]);
+       * @param {boolean} autoplay: flag to autoplay once resetted
+       */
+      reset: function (autoplay) {
+        angular.extend(this, playerDefaults);
+        this.$clearSourceList();
+        this.load(this.$playlist, autoplay);
+      },
+      /**
+       * @usage play([index], [selectivePlay])
+       * @param {integer} index: playlist index (0...n), to start playing from
+       * @param {boolean} selectivePlay: only correct value is `true`, in which case will only play the specified,
+       *                                 or current, track. The default is to continue playing the next one.
+       */
+      play: function (index, selectivePlay) {
+        // method overloading
+        if (typeof index === 'boolean') {
+          selectivePlay = index;
+          index = undefined;
+        }
+        if (selectivePlay) {
+          this.$selective = true;
+        }
+
+        if (this.$playlist.length > index) {
+          this.currentTrack = index + 1;
+          return this.load(this.$playlist[index], true);
+        }
+        // readyState = HAVE_NOTHING (0) means there's nothing into the <audio>/<video> tag
+        if (!this.currentTrack && this.$domEl.readyState) { this.currentTrack++; }
+
+        // In case the stream is completed, reboot it with a load()
+        if (this.ended) {
+          this.load(true);
+        } else {
+          this.$domEl.play();
+        }
+      },
+      playPause: function (index, selectivePlay) {
+        // method overloading
+        if (typeof index === 'boolean') {
+          selectivePlay = index;
+          index = undefined;
+        }
+        if (selectivePlay) {
+          this.$autoplay = true;
+        }
+
+        if (typeof index === 'number' && index + 1 !== this.currentTrack) {
+          this.play(index);
+        } else if (this.playing) {
+          this.pause();
+        } else {
+          this.play();
+        }
+      },
+      pause: function () {
+        this.$domEl.pause();
+      },
+      stop: function () {
+        this.reset();
+      },
+      toggleMute: function () {
+        this.muted = this.$domEl.muted = !this.$domEl.muted;
+      },
+      next: function (autoplay) {
+        var self = this;
+        if (self.currentTrack && self.currentTrack < self.tracks) {
+          var wasPlaying = autoplay || self.playing;
+          self.pause();
+          $timeout(function () {
+            self.$clearSourceList();
+            self.$addSourceList(self.$playlist[self.currentTrack]);
+            self.load(wasPlaying); // setup autoplay here.
+            self.currentTrack++;
+          });
+        }
+      },
+      prev: function (autoplay) {
+        var self = this;
+        if (self.currentTrack && self.currentTrack - 1) {
+          var wasPlaying = autoplay || self.playing;
+          self.pause();
+          $timeout(function () {
+            self.$clearSourceList();
+            self.$addSourceList(self.$playlist[self.currentTrack - 2]);
+            self.load(wasPlaying); // setup autoplay here.
+            self.currentTrack--;
+          });
+        }
+      },
+      setPlaybackRate: function (value) {
+        this.$domEl.playbackRate = value;
+      },
+      setVolume: function (value) {
+        this.$domEl.volume = value;
+      },
+      seek: function (value) {
+        var doubleval = 0, valuesArr;
+        if (typeof value === 'string') {
+          valuesArr = value.split(':');
+          doubleval += parseInt(valuesArr.pop(), 10);
+          if (valuesArr.length) { doubleval += parseInt(valuesArr.pop(), 10) * 60; }
+          if (valuesArr.length) { doubleval += parseInt(valuesArr.pop(), 10) * 3600; }
+          if (!isNaN(doubleval)) {
+            return this.$domEl.currentTime = doubleval;
+          }
+        } else {
+          return this.$domEl.currentTime = value;
+        }
+      },
+      /**
+       * binds a specific event directly to the element
+       * @param  {string}   type   event name
+       * @param  {function} fn     callback
+       * @return {function}        unbind function, call it in order to remove the listener
+       */
+      on: function (type, fn) {
+        return this.$element.on(type, fn);
+      },
+      off: function (type, fn) {
+        return this.$element.off(type, fn);
+      },
+      one: function (type, fn) {
+        return this.$element.one(type, fn);
+      },
+      $addSourceList: function (sourceList) {
+        var self = this;
+        if (angular.isArray(sourceList)) {
+          angular.forEach(sourceList, function (singleElement, index) {
+            var sourceElem = document.createElement('SOURCE');
+            ['src', 'type', 'media'].forEach(function (key) { // use only a subset of the properties
+              if (singleElement[key] !== undefined) { // firefox is picky if you set undefined attributes
+                sourceElem.setAttribute(key, singleElement[key]);
+              }
+            });
+            self.$element.append(sourceElem);
+          });
+        } else if (angular.isObject(sourceList)) {
+          var sourceElem = document.createElement('SOURCE');
+          ['src', 'type', 'media'].forEach(function (key) {
+            if (sourceList[key] !== undefined) {
+              sourceElem.setAttribute(key, sourceList[key]);
+            }
+          });
+          self.$element.append(sourceElem);
+        }
+      },
+      $clearSourceList: function () {
+        this.$element.contents().remove();
+      },
+      $formatTime: function (seconds) {
+        if (seconds === Infinity) {
+          return '∞'; // If the data is streaming
+        }
+        var hours = parseInt(seconds / 3600, 10) % 24,
+            minutes = parseInt(seconds / 60, 10) % 60,
+            secs = parseInt(seconds % 60, 10),
+            result,
+            fragment = (minutes < 10 ? '0' + minutes : minutes) + ':' + (secs  < 10 ? '0' + secs : secs);
+        if (hours > 0) {
+          result = (hours < 10 ? '0' + hours : hours) + ':' + fragment;
+        } else {
+          result = fragment;
+        }
+        return result;
+      },
+      $attachPlaylist: function (pl) {
+        if (pl === undefined || pl === null) {
+          this.playlist = [];
+        } else {
+          this.$playlist = pl;
+        }
+      }
+    };
+
+    /**
+     * Binding function that gives life to AngularJS scope
+     * @param  {Scope}  au        Player Scope
+     * @param  {HTMLMediaElement} HTML5 element
+     * @param  {jQlite} element   <audio>/<video> element
+     * @return {function}
+     *
+     * Returns an unbinding function
+     */
+    var bindListeners = function (au, al, element) {
+      var listeners = {
+        playing: function () {
+          au.$apply(function (scope) {
+            scope.playing = true;
+            scope.ended = false;
+          });
+        },
+        pause: function () {
+          au.$apply(function (scope) {
+            scope.playing = false;
+          });
+        },
+        ended: function () {
+          if (!au.$selective && au.currentTrack < au.tracks) {
+            au.next(true);
+          } else {
+            au.$apply(function (scope) {
+              scope.ended = true;
+              scope.playing = false; // IE9 does not throw 'pause' when file ends
+            });
+          }
+        },
+        timeupdate: throttle(1000, false, function () {
+          au.$apply(function (scope) {
+            scope.currentTime = al.currentTime;
+            scope.formatTime = scope.$formatTime(scope.currentTime);
+          });
+        }),
+        loadedmetadata: function () {
+          au.$apply(function (scope) {
+            if (!scope.currentTrack) { scope.currentTrack++; } // This is triggered *ONLY* the first time a <source> gets loaded.
+            scope.duration = al.duration;
+            scope.formatDuration = scope.$formatTime(scope.duration);
+            if (al.buffered.length) {
+              scope.loadPercent = Math.round((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100);
+            }
+          });
+        },
+        progress: function () {
+          if (au.$domEl.buffered.length) {
+            au.$apply(function (scope) {
+              scope.loadPercent = Math.round((al.buffered.end(al.buffered.length - 1) / scope.duration) * 100);
+              scope.network = 'progress';
+            });
+          }
+        },
+        volumechange: function () { // Sent when volume changes (both when the volume is set and when the muted attribute is changed).
+          au.$apply(function (scope) {
+            // scope.volume = Math.floor(al.volume * 100);
+            scope.volume = al.volume;
+            scope.muted = al.muted;
+          });
+        },
+        seeked: function () {
+          au.$apply(function (scope) {
+            scope.seeking = false;
+          });
+        },
+        seeking: function () {
+          au.$apply(function (scope) {
+            scope.seeking = true;
+          });
+        },
+        ratechange: function () {
+          au.$apply(function (scope) {
+            // scope.playbackRate = Math.floor(al.playbackRate * 100);
+            scope.playbackRate = al.playbackRate;
+          });
+        },
+        stalled: function () {
+          au.$apply(function (scope) {
+            scope.network = 'stalled';
+          });
+        },
+        suspend: function () {
+          au.$apply(function (scope) {
+            scope.network = 'suspend';
+          });
+        }
+      };
+
+      angular.forEach(listeners, function (f, listener) {
+        element.on(listener, f);
+      });
+    };
+
+    var MediaPlayer = function (element) {
+      var mediaScope = angular.extend($rootScope.$new(true), {
+        $element: element,
+        $domEl: element[0],
+        $playlist: undefined,
+
+        // bind TimeRanges structures to actual MediaElement
+        buffered: element[0].buffered,
+        played: element[0].played,
+        seekable: element[0].seekable,
+      }, playerDefaults, playerMethods);
+      bindListeners(mediaScope, element[0], element);
+      return mediaScope;
+    };
+
+    // creates a watch function bound to the specific player
+    // optimizable: closures eats ram
+    function playlistWatch(player) {
+      return function (playlistNew, playlistOld, watchScope) {
+        var currentTrack,
+            newTrackNum = null;
+
+        // on every playlist change, it refreshes the reference, safer/shorter approach
+        // than using multiple ifs and refresh only if it changed; there's no benefit in that
+        player.$attachPlaylist(playlistNew);
+        if (playlistNew === undefined && playlistOld !== undefined) {
+          return player.pause();
+        }
+
+        /**
+         * Playlist update logic:
+         * If the player has started ->
+         *   Check if the playing track is in the new Playlist [EXAMPLE BELOW]
+         *   If it is ->
+         *     Assign to it the new tracknumber
+         *   Else ->
+         *     If the new Playlist has some song ->
+         *       Pause the player, and get the new Playlist
+         *     Else ->
+         *       Reset the player, and await for orders
+         *
+         * Else (if the player hasn't started yet)
+         *   Just replace the <src> tags
+         *
+         * Example
+         * playlist: [a,b,c], playing: c, trackNum: 2
+         * ----delay 5 sec-----
+         * playlist: [f,a,b,c], playing: c, trackNum: 3
+         *
+         */
+        if (player.currentTrack) {
+          currentTrack = playlistOld ? playlistOld[player.currentTrack - 1] : -1;
+          for (var i = 0; i < playlistNew.length; i++) {
+            if (angular.equals(playlistNew[i], currentTrack)) { newTrackNum = i; break; }
+          }
+          if (newTrackNum !== null) { // currentTrack it's still in the new playlist, update trackNumber
+            player.currentTrack = newTrackNum + 1;
+            player.tracks = playlistNew.length;
+          } else { // currentTrack has been removed.
+            player.pause();
+            if (playlistNew.length) { // if the new playlist has some elements, replace actual.
+              $timeout(function () { // need $timeout because the mediaTag needs a little time to launch the 'pause' event
+                player.$clearSourceList();
+                player.$addSourceList(playlistNew[0]);
+                player.load();
+                player.tracks = playlistNew.length;
+              });
+            } else { // the new playlist has no elements, clear actual
+              player.reset();
+            }
+          }
+        } else if (playlistNew.length) { // new playlist has elements, load them
+          player.$clearSourceList();
+          player.$addSourceList(playlistNew[0]);
+          player.load();
+          player.tracks = playlistNew.length;
+        } else { // new playlist has no elements, clear actual
+          player.reset();
+        }
+      };
+    }
+
+    return {
+      /**
+       * The directive uses the Scope in which gets declared,
+       * so it can read/write it with ease.
+       * The only isolated Scope here gets created for the MediaPlayer.
+       */
+      scope: false,
+      link: function (scope, element, attrs, ctrl) {
+        var playlistName = attrs.playlist,
+            mediaName = attrs.mediaPlayer || attrs.playerControl;
+
+        var player = new MediaPlayer(element), playlist = scope[playlistName];
+        // create data-structures in the father Scope
+        if (playlistName === undefined) {
+          playlist = []; // local playlist gets defined as new
+        } else if (scope[playlistName] === undefined) {
+          playlist = scope[playlistName] = []; // define playlist on father scope
+        } else {
+          playlist = scope[playlistName];
+        }
+        if (mediaName !== undefined) { scope[mediaName] = player; }
+
+        if (element[0].tagName !== 'AUDIO' && element[0].tagName !== 'VIDEO') {
+          return new Error('player directive works only when attached to an <audio>/<video> type tag');
+        }
+        var mediaElement = [],
+            sourceElements = element.find('source');
+
+        // create a single playlist element from <source> tag(s).
+        // if the <source> tag is one, use object notation...
+        if (sourceElements.length === 1) {
+          playlist.unshift({ src: sourceElements[0].src, type: sourceElements[0].type, media: sourceElements[0].media });
+        } else if (sourceElements.length > 1) { // otherwise use array notation
+          angular.forEach(sourceElements, function (sourceElement) {
+            mediaElement.push({ src: sourceElement.src, type: sourceElement.type, media: sourceElement.media });
+          });
+          // put mediaElement as first element in the playlist
+          playlist.unshift(mediaElement);
+        }
+
+        /**
+         * If the user wants to keep track of the playlist changes
+         * has to use data-playlist="variableName" in the <audio>/<video> tag
+         *
+         * Otherwise: it will be created an empty playlist and attached to the player.
+         */
+        if (playlistName === undefined) {
+          player.$attachPlaylist(playlist); // empty playlist case
+        } else if (playlist.length) {
+          playlistWatch(player)(playlist, undefined, scope); // playlist already populated gets bootstrapped
+          scope.$watch(playlistName, playlistWatch(player), true); // then watch gets applied
+        } else {
+          scope.$watch(playlistName, playlistWatch(player), true); // playlist empty, only watch
+        }
+
+        // player scope destructor
+        scope.$on('$destroy', player.$destroy);
+      }
+    };
+
+  }]
+);
+
+angular.module('mediaPlayer.helpers', [])
+.factory('throttle', ['$timeout', function ($timeout) {
+  return function (delay, no_trailing, callback, debounce_mode) {
+    var timeout_id,
+    last_exec = 0;
+
+    if (typeof no_trailing !== 'boolean') {
+      debounce_mode = callback;
+      callback = no_trailing;
+      no_trailing = undefined;
+    }
+
+    var wrapper = function () {
+      var that = this,
+          elapsed = +new Date() - last_exec,
+          args = arguments,
+          exec = function () {
+            last_exec = +new Date();
+            callback.apply(that, args);
+          },
+          clear = function () {
+            timeout_id = undefined;
+          };
+
+      if (debounce_mode && !timeout_id) { exec(); }
+      if (timeout_id) { $timeout.cancel(timeout_id); }
+      if (debounce_mode === undefined && elapsed > delay) {
+        exec();
+      } else if (no_trailing !== true) {
+        timeout_id = $timeout(debounce_mode ? clear : exec, debounce_mode === undefined ? delay - elapsed : delay);
+      }
+    };
+
+    return wrapper;
+  };
+}]);
