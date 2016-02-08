@@ -55,6 +55,7 @@ angular.module('7minWorkout')
 
           if (exercisePlan.details.name != 'rest') {
               $scope.currentExerciseIndex++;
+              $scope.$emit("event:workout:exerciseStarted", exercisePlan.details);
           }
 
           exerciseIntervalPromise = startExerciseTimeTracking();
