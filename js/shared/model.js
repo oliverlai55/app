@@ -1,7 +1,6 @@
-﻿'use strict';
+'use strict';
 
 /* Model classes */
-//This is the service shared between the two apps.
 angular.module('app')
     .factory('Exercise', function () {
         function Exercise(args) {
@@ -10,18 +9,17 @@ angular.module('app')
             this.description = args.description;
             this.image = args.image;
             this.related = {};
-            this.related.videos = args.videos;
+            this.related.videos = args.videos || [];
             this.nameSound = args.nameSound;
             this.procedure = args.procedure;
         }
         return Exercise;
-        //returning a constructor function reference
     });
 
 angular.module('app')
     .factory('WorkoutPlan', function () {
         function WorkoutPlan(args) {
-            this.exercises = [];
+            this.exercises = args.exercises || [];
             this.name = args.name;
             this.title = args.title;
             this.description = args.description;

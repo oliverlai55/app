@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app', ['ngRoute', 'ngSanitize', '7minWorkout','WorkoutBuilder', 'mediaPlayer', 'ui.bootstrap', 'LocalStorageModule', 'ngAnimate']).
+angular.module('app', ['ngRoute', 'ngSanitize', '7minWorkout', 'WorkoutBuilder', 'mediaPlayer', 'ui.bootstrap', 'LocalStorageModule', 'ngAnimate', 'ngMessages']).
 config(function ($routeProvider, $sceDelegateProvider) {
     $routeProvider.when('/start', { templateUrl: 'partials/start.html' });
     $routeProvider.when('/workout', { templateUrl: 'partials/workout.html', controller: 'WorkoutController' });
@@ -8,40 +8,59 @@ config(function ($routeProvider, $sceDelegateProvider) {
 
     $routeProvider.when('/builder', {
         redirectTo: '/builder/workouts'
-        //landing page for Trainer App, lists all avail. workout
     });
+    //The landing page with all available workouts for the Fitness App
     $routeProvider.when('/builder/workouts', {
         templateUrl: 'partials/workoutbuilder/workouts.html',
         leftNav: 'partials/workoutbuilder/left-nav-main.html',
         topNav: 'partials/workoutbuilder/top-nav.html',
         controller: 'WorkoutListController'
     });
-
-    //lists all available exercise
+    //given a list of available exercises
     $routeProvider.when('/builder/exercises', {
         templateUrl: 'partials/workoutbuilder/exercises.html',
         leftNav: 'partials/workoutbuilder/left-nav-main.html',
         topNav: 'partials/workoutbuilder/top-nav.html',
-        controller: 'ExerciseListController'
-    });
-
+        controller:'ExerciseListController'
+});
     //creates new workout
     $routeProvider.when('/builder/workouts/new', {
         templateUrl: 'partials/workoutbuilder/workout.html',
         leftNav: 'partials/workoutbuilder/left-nav-exercises.html',
         topNav: 'partials/workoutbuilder/top-nav.html',
+        controller: 'WorkoutDetailController',
+        resolve: {
+            selectedWorkout: ['WorkoutBuilderService', function (WorkoutBuilderService) {
+                return WorkoutBuilderService.startBuilding();
+            }],
+        }
     });
-
-    //Edits existing workout with specfiic ID
+    //edits existing workout with id
     $routeProvider.when('/builder/workouts/:id', {
         templateUrl: 'partials/workoutbuilder/workout.html',
         leftNav: 'partials/workoutbuilder/left-nav-exercises.html',
+        controller: 'WorkoutDetailController',
         topNav: 'partials/workoutbuilder/top-nav.html',
+        resolve: {
+            selectedWorkout: ['WorkoutBuilderService', '$route', '$location', function (WorkoutBuilderService, $route, $location) {
+                var workout = WorkoutBuilderService.startBuilding($route.current.params.id);
+                if (!workout) {
+                    $location.path('/builder/workouts');    //If the workout not found redirect to workout list
+                }
+                return workout;
+            }],
+        }
     });
-    //creates new exercise
-    $routeProvider.when('/builder/exercises/new', { templateUrl: 'partials/workoutbuilder/exercise.html' });
-    //edits existing exercise with specific iD
-    $routeProvider.when('/builder/exercises/:id', { templateUrl: 'partials/workoutbuilder/exercise.html' });
+    $routeProvider.when('/builder/exercises/new', {
+        templateUrl: 'partials/workoutbuilder/exercise.html',
+        controller: 'ExerciseDetailController',
+        topNav: 'partials/workoutbuilder/top-nav.html'
+    });
+    $routeProvider.when('/builder/exercises/:id', {
+        templateUrl: 'partials/workoutbuilder/exercise.html',
+        controller: 'ExerciseDetailController',
+        topNav: 'partials/workoutbuilder/top-nav.html'
+    });
 
 
     $routeProvider.otherwise({ redirectTo: '/start' });
