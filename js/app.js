@@ -16,23 +16,31 @@ config(function ($routeProvider, $sceDelegateProvider) {
         topNav: 'partials/workoutbuilder/top-nav.html',
         controller: 'WorkoutListController'
     });
+
+    //lists all available exercise
     $routeProvider.when('/builder/exercises', {
         templateUrl: 'partials/workoutbuilder/exercises.html',
         leftNav: 'partials/workoutbuilder/left-nav-main.html',
         topNav: 'partials/workoutbuilder/top-nav.html',
         controller: 'ExerciseListController'
     });
+
+    //creates new workout
     $routeProvider.when('/builder/workouts/new', {
         templateUrl: 'partials/workoutbuilder/workout.html',
         leftNav: 'partials/workoutbuilder/left-nav-exercises.html',
         topNav: 'partials/workoutbuilder/top-nav.html',
     });
+
+    //Edits existing workout with specfiic ID
     $routeProvider.when('/builder/workouts/:id', {
         templateUrl: 'partials/workoutbuilder/workout.html',
         leftNav: 'partials/workoutbuilder/left-nav-exercises.html',
         topNav: 'partials/workoutbuilder/top-nav.html',
     });
+    //creates new exercise
     $routeProvider.when('/builder/exercises/new', { templateUrl: 'partials/workoutbuilder/exercise.html' });
+    //edits existing exercise with specific iD
     $routeProvider.when('/builder/exercises/:id', { templateUrl: 'partials/workoutbuilder/exercise.html' });
 
 
