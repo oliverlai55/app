@@ -25,17 +25,22 @@ angular.module('WorkoutBuilder')
           $scope.formWorkout.$setPristine();
           $scope.submitted = false;
       }
-
+// this is an instance of NgModelController
+// $watch contains the initialization code for the exercise count validation
+// $watch starts once the model controller is available
       $scope.$watch('formWorkout.exerciseCount', function (newValue) {
           if (newValue) {
               newValue.$setValidity("count", $scope.workout.exercises.length > 0);
+// $setValidity funciton is used to set the validation key ('count') on the $error object
+// for a failed validation
           }
       });
-
+// when the length of exercises array changes, the $watch starts
       $scope.$watch('workout.exercises.length', function (newValue, oldValue) {
           if (newValue != oldValue) {
               $scope.formWorkout.exerciseCount.$dirty = true;
               $scope.formWorkout.$setDirty();
+            // $watch reevaluates the count validation using $setValidity
               $scope.formWorkout.exerciseCount.$setValidity("count", newValue > 0);
           }
       });
