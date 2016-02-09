@@ -5,16 +5,11 @@
         </h2>
     </div>
     <form class="row" name="formWorkout" novalidate>
-    <!-- novalidate tells browser not to do inbuild input validation -->
-    <!-- this lists out all the exercises that are in the workout folder -->
         <div id="exercises-list" class="col-sm-5 col-sm-offset-1">
             <span name="exerciseCount" ng-model="workout.exercises.length"></span>
-            <!-- $error contains the list of erros for the specific ng-model directive -->
-            <!-- $dirty: value of this is true when the input data has been updated -->
             <div class="alert alert-danger" ng-show="formWorkout.exerciseCount.$dirty && formWorkout.exerciseCount.$error.count">
                 The workout should have at least one exercise!
             </div>
-            <!-- this renders the exercise list -->
             <div ng-repeat="exercise in workout.exercises" class="exercise-item">
                 <div ng-include="'workout-exercise-tile'"></div>
             </div>
@@ -38,15 +33,11 @@
             </div>
             <div class="form-group row" ng-class="{'has-error':formWorkout.restBetweenExercise.$error.number}">
                 <label for="workout-rest">Rest Time (in seconds):</label>
-                <!-- ng-pattern is the regex validation -->
                 <input type="number" name="restBetweenExercise" class="form-control" id="workout-rest" placeholder="Rest period between exercise in seconds." ng-model="workout.restBetweenExercise" min="1" ng-pattern="/^-?\d+$/" required>
                 <!--<label ng-show="hasError(formWorkout.restBetweenExercise,formWorkout.restBetweenExercise.$error.required)" class="text-danger">Time duration is required.</label>
                 <label ng-show="hasError(formWorkout.restBetweenExercise,formWorkout.restBetweenExercise.$error.number)" class="text-danger">Time duration should be numeric.</label>
                 <label ng-show="hasError(formWorkout.restBetweenExercise,formWorkout.restBetweenExercise.$error.min)" class="text-danger">Only positive integer value allowed.</label>
                 <label ng-show="hasError(formWorkout.restBetweenExercise,formWorkout.restBetweenExercise.$error.pattern)" class="text-danger">Only integer value allowed.</label>-->
-
-    <!--ng-messages directive watches the state of the object (object properties) and shows/hides the message(using ng-message) based on the state changes-->
-    <!-- when the $error is true, ng-message is displayed -->
                 <div ng-messages="formWorkout.restBetweenExercise.$error" ng-if="formWorkout.restBetweenExercise.$dirty || formWorkout.$submitted">
                     <label ng-message="required" class="text-danger">Time duration is required.</label>
                     <label ng-message="number" class="text-danger">Time duration should be numeric.</label>
@@ -85,7 +76,6 @@
             </div>
             <div class="details">
                 <ng-form name="formDuration">
-                // ng-option allows user to select the duration of exercise
                     <select class="select-duration form-control" name="duration" ng-model="exercise.duration" ng-options="duration.value as duration.title for duration in durations" required>
                         <option value="">Select Duration</option>
                     </select>

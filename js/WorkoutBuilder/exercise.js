@@ -4,12 +4,9 @@ angular.module('WorkoutBuilder')
   .controller('ExercisesNavController', ['$scope', 'WorkoutService', 'WorkoutBuilderService', function ($scope, WorkoutService, WorkoutBuilderService) {
       $scope.addExercise = function (exercise) {
           WorkoutBuilderService.addExercise(exercise);
-          //ExercisesNavController does not have direct access to workout
-          //it relies on a service method addExercise
-          //this updates the buildingWorkout model data with new exercise.
       }
       var init = function () {
-          $scope.exercises = WorkoutService.getExercises();
+          $scope.exercises = WorkoutService.Exercises.query();
       };
       init();
   }]);
@@ -20,9 +17,7 @@ angular.module('WorkoutBuilder')
           $location.path('/builder/exercises/' + exercise.name);
       }
       var init = function () {
-          WorkoutService.getExercises().success(function (data) {
-              $scope.exercises = data;
-          });
+          $scope.exercises = WorkoutService.Exercises.query();
       };
       init();
   }]);
@@ -33,9 +28,10 @@ angular.module('WorkoutBuilder')
       $scope.save = function () {
           $scope.submitted = true;      // Will force validations
           if ($scope.formExercise.$invalid) return;
-          $scope.exercise = ExerciseBuilderService.save();
-          $scope.formExercise.$setPristine();
-          $scope.submitted = false;
+          ExerciseBuilderService.save().then(function (data) {
+              $scope.formExercise.$setPristine();
+              $scope.submitted = false;
+          });
       };
 
       $scope.hasError = function (modelController, error) {
@@ -53,8 +49,9 @@ angular.module('WorkoutBuilder')
       }
 
       $scope.deleteExercise = function () {
-          ExerciseBuilderService.delete();
-          $location.path('/builder/exercises/');
+          ExerciseBuilderService.delete().then(function (data) {
+              $location.path('/builder/exercises/');
+          });
       };
 
       $scope.addVideo = function () {
@@ -68,6 +65,13 @@ angular.module('WorkoutBuilder')
       var init = function () {
           // We do not use the resolve property on the route to load exercise as we do it with workout.
           $scope.exercise = ExerciseBuilderService.startBuilding($routeParams.id);
+
+          if ($routeParams.id) {   // In case of existing workout loaded from server need to wait to know whether the exercise exists.
+              $scope.exercise.$promise.then(null, function (error) {
+                  // If exercise not found we redirect back to exercise list page.
+                  $location.path('/builder/exercises/');
+              })
+          }
       };
 
       init();

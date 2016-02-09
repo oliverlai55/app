@@ -1,7 +1,6 @@
 'use strict';
 
 /* directives */
-//this sends confirm message when user is about to delete the workout
 angular.module('app').directive('ngConfirm', [function () {
     return {
         restrict: 'A',

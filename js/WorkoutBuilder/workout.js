@@ -6,13 +6,14 @@ angular.module('WorkoutBuilder')
           $location.path('/builder/workouts/' + workout.name);
       }
       var init = function () {
-          $scope.workouts = WorkoutService.getWorkouts();
+          WorkoutService.getWorkouts().then(function (data) {
+              $scope.workouts = data;
+          });
       };
       init();
   }]);
 
 angular.module('WorkoutBuilder')
-//manages workout, creating, editing, viewing the workout
   .controller('WorkoutDetailController', ['$scope', 'WorkoutBuilderService', 'selectedWorkout', '$location', '$routeParams', function ($scope, WorkoutBuilderService, selectedWorkout, $location, $routeParams) {
       $scope.removeExercise = function (exercise) {
           WorkoutBuilderService.removeExercise(exercise);
@@ -21,28 +22,23 @@ angular.module('WorkoutBuilder')
       $scope.save = function () {
           $scope.submitted = true;      // Will force validations
           if ($scope.formWorkout.$invalid) return;
-          //if its invalid, return, otherwise we set the form to pristine state
-          //meaning back to its clean state after data is saved to server
-          $scope.workout = WorkoutBuilderService.save();
-          $scope.formWorkout.$setPristine();
-          $scope.submitted = false;
+          WorkoutBuilderService.save().then(function (workout) {
+              $scope.workout = workout;
+              $scope.formWorkout.$setPristine();
+              $scope.submitted = false;
+          });
       }
-// this is an instance of NgModelController
-// $watch contains the initialization code for the exercise count validation
-// $watch starts once the model controller is available
+
       $scope.$watch('formWorkout.exerciseCount', function (newValue) {
           if (newValue) {
               newValue.$setValidity("count", $scope.workout.exercises.length > 0);
-// $setValidity funciton is used to set the validation key ('count') on the $error object
-// for a failed validation
           }
       });
-// when the length of exercises array changes, the $watch starts
+
       $scope.$watch('workout.exercises.length', function (newValue, oldValue) {
           if (newValue != oldValue) {
               $scope.formWorkout.exerciseCount.$dirty = true;
               $scope.formWorkout.$setDirty();
-            // $watch reevaluates the count validation using $setValidity
               $scope.formWorkout.exerciseCount.$setValidity("count", newValue > 0);
           }
       });
@@ -99,12 +95,12 @@ angular.module('WorkoutBuilder')
       }
 
       $scope.deleteWorkout = function () {
-          WorkoutBuilderService.delete();
-          $location.path('/builder/workouts/');
+          WorkoutBuilderService.delete().then(function (data) {
+              $location.path('/builder/workouts/');
+          });
       };
       var init = function () {
           $scope.workout = selectedWorkout;
-          //resolved workout
       };
       init();
   }]);
