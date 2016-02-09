@@ -291,7 +291,8 @@ angular.module('app')
             });
             return result;
         };
-
+// works for a workout with the same name in the existing workouts array
+// if found, updates and replaces it.
         service.updateWorkout = function (workout) {
             for (var i = 0; i < workouts.length; i++) {
                 if (workouts[i].name === workout.name) {
@@ -302,6 +303,7 @@ angular.module('app')
             return workout;
         };
 
+// check on the workout name and pushes the workout into the workout array
         service.addWorkout = function (workout) {
             if (workout.name) {
                 workouts.push(workout);

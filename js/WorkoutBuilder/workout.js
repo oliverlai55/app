@@ -21,6 +21,8 @@ angular.module('WorkoutBuilder')
       $scope.save = function () {
           $scope.submitted = true;      // Will force validations
           if ($scope.formWorkout.$invalid) return;
+          //if its invalid, return, otherwise we set the form to pristine state
+          //meaning back to its clean state
           $scope.workout = WorkoutBuilderService.save();
           $scope.formWorkout.$setPristine();
           $scope.submitted = false;
