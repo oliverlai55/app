@@ -43,6 +43,9 @@
                 <label ng-show="hasError(formWorkout.restBetweenExercise,formWorkout.restBetweenExercise.$error.number)" class="text-danger">Time duration should be numeric.</label>
                 <label ng-show="hasError(formWorkout.restBetweenExercise,formWorkout.restBetweenExercise.$error.min)" class="text-danger">Only positive integer value allowed.</label>
                 <label ng-show="hasError(formWorkout.restBetweenExercise,formWorkout.restBetweenExercise.$error.pattern)" class="text-danger">Only integer value allowed.</label>-->
+
+    <!--ng-messages directive watches the state of the object (object properties) and shows/hides the message(using ng-message) based on the state changes-->
+    <!-- when the $error is true, ng-message is displayed -->
                 <div ng-messages="formWorkout.restBetweenExercise.$error" ng-if="formWorkout.restBetweenExercise.$dirty || formWorkout.$submitted">
                     <label ng-message="required" class="text-danger">Time duration is required.</label>
                     <label ng-message="number" class="text-danger">Time duration should be numeric.</label>
