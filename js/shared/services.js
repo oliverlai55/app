@@ -16,11 +16,17 @@ angular.module('app')
         };
 
         service.getExercise = function (name) {
-            var result = null;
-            angular.forEach(service.getExercises(), function (exercise) {
-                if (exercise.name === name) result = angular.copy(exercise);
+          var collectionUrl = 
+          "https://api.mongolab.com/api/1/databases/workoutapp/collections";
+            return $http.get(collectionUrl + "/exercises",{
+              params: {apiKey: 'h-1p3PDXGoa3hvLfRZAr-8JAPLd9Alep' }
             });
-            return result;
+          
+            // var result = null;
+            // angular.forEach(service.getExercises(), function (exercise) {
+            //     if (exercise.name === name) result = angular.copy(exercise);
+            // });
+            // return result;
         };
 
         service.updateExercise = function (exercise) {
