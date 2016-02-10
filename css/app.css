@@ -1,5 +1,8 @@
 /* app css stylesheet */
 
+.btn-info{
+    background: #82898f;
+}
 html{
     height:100%;
 }
@@ -122,6 +125,9 @@ input[type="checkbox"].input-validation-error {
     padding-top:15px;
 }
 
+/*#video-panel .panel-tile{
+    background-color: white;
+}*/
 #video-panel .panel-body{
     max-height:650px;
     overflow:auto;
@@ -144,7 +150,8 @@ input[type="checkbox"].input-validation-error {
     font-size:120pt;
     width:140px;
     height:140px;
-    color:#4eaded;
+   /* color:#4eaded;*/
+    color: #005E9E;
 }
 .absolute-center {
   margin: auto;
@@ -168,7 +175,7 @@ input[type="checkbox"].input-validation-error {
     font-size:80pt;
     width:100px;
     height:100px;
-    color:#4eaded;
+    color:#005E9E;
 }
 /*Styles for workout page - end*/
 
@@ -297,6 +304,7 @@ div[ng-view].ng-leave-active {
     font-size: 12pt;
     padding:0 10px 0 10px;
 }
+
 
 .exercise-tile {
     width: 300px;

@@ -140,7 +140,7 @@ angular.module('7minWorkout')
 angular.module('7minWorkout')
   .controller('WorkoutAudioController', ['$scope', '$interval', '$location', '$timeout', function ($scope, $interval, $location, $timeout) {
       $scope.exercisesAudio = [];
-
+//$watch allows us to register a listner that gets called when the scope property changes.
       var workoutPlanwatch = $scope.$watch('workoutPlan', function (newValue, oldValue) {
           if (newValue) {
               angular.forEach($scope.workoutPlan.exercises, function (exercise) {
