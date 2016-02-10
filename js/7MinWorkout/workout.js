@@ -1,7 +1,7 @@
 'use strict';
 
 /* Controllers */
-
+//7minworkout module. Using dependency injection
 angular.module('7minWorkout')
   .controller('WorkoutController', ['$scope', '$interval', '$location', 'workoutHistoryTracker', 'appEvents', 'WorkoutService', '$routeParams', 'Exercise', function ($scope, $interval, $location, workoutHistoryTracker, appEvents, WorkoutService, $routeParams, Exercise) {
       var restExercise;
@@ -185,7 +185,7 @@ angular.module('7minWorkout')
               if ($scope.aboutToCompleteAudio.currentTime > 0 && $scope.aboutToCompleteAudio.currentTime < $scope.aboutToCompleteAudio.duration) $scope.aboutToCompleteAudio.play();
           }
       });
-
+//initializes the function
       var init = function () {
       }
 
