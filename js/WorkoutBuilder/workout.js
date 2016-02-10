@@ -14,15 +14,15 @@ angular.module('WorkoutBuilder')
   }]);
 
 angular.module('WorkoutBuilder')
-  .controller('WorkoutDetailController', ['$scope', 'WorkoutBuilderService', 'selectedWorkout', '$location', '$routeParams', function ($scope, WorkoutBuilderService, selectedWorkout, $location, $routeParams) {
+  .controller('WorkoutDetailController', ['$scope', 'WorkoutBuilderService', 'selectedWorkout', '$location', '$routeParams', 'WorkoutService', '$q', function ($scope, WorkoutBuilderService, selectedWorkout, $location, $routeParams, WorkoutService, $q) {
       $scope.removeExercise = function (exercise) {
           WorkoutBuilderService.removeExercise(exercise);
       };
 
       $scope.save = function () {
-          $scope.submitted = true;      // Will force validations
           if ($scope.formWorkout.$invalid) return;
-          WorkoutBuilderService.save().then(function (workout) {
+          $scope.submitted = true;      // Will force validations
+          return WorkoutBuilderService.save().then(function (workout) {
               $scope.workout = workout;
               $scope.formWorkout.$setPristine();
               $scope.submitted = false;
@@ -93,6 +93,15 @@ angular.module('WorkoutBuilder')
       $scope.canDeleteWorkout = function () {
           return WorkoutBuilderService.canDeleteWorkout();
       }
+
+      $scope.uniqueUserName = function (value) {
+          // Empty workout name or existing workout name does not require validation.
+          if (!value || value === $routeParams.id) return $q.when(true);
+          return WorkoutService
+                   .getWorkout(value.toLowerCase())
+                   .then(function (data) { return $q.reject(); },
+                          function (error) { return true; });
+      };
 
       $scope.deleteWorkout = function () {
           WorkoutBuilderService.delete().then(function (data) {
