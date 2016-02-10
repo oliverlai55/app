@@ -2,11 +2,11 @@ angular.module('app').
 config(function ($routeProvider, $sceDelegateProvider, WorkoutServiceProvider, $httpProvider, ApiKeyAppenderInterceptorProvider) {
 
     // IMPORTANT: Set the database name and API Key here before running the application
-    ApiKeyAppenderInterceptorProvider.setApiKey("E16WgslFduXHiMAdAg6qcG1KKYx7WNWg");
+    ApiKeyAppenderInterceptorProvider.setApiKey("h-1p3PDXGoa3hvLfRZAr-8JAPLd9Alep");
 
     $httpProvider.interceptors.push('ApiKeyAppenderInterceptor');
 
-    WorkoutServiceProvider.configure("angularjsbyexample");
+    WorkoutServiceProvider.configure("workoutapp");
 
     $routeProvider.when('/start', { templateUrl: 'partials/workout/start.html' });
     $routeProvider.when('/workout/:id', { templateUrl: 'partials/workout/workout.html', controller: 'WorkoutController' });
