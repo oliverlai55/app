@@ -6,6 +6,7 @@ angular.module('7minWorkout')
   .controller('WorkoutController', ['$scope', '$interval', '$location', 'workoutHistoryTracker', 'appEvents', 'WorkoutService', '$routeParams', 'Exercise', function ($scope, $interval, $location, workoutHistoryTracker, appEvents, WorkoutService, $routeParams, Exercise) {
       var restExercise;
       var exerciseIntervalPromise;
+      //function that starts the workout
       var startWorkout = function () {
           WorkoutService
               .getWorkout($routeParams.id)
@@ -37,6 +38,7 @@ angular.module('7minWorkout')
       }
       
       var startExercise = function (exercisePlan) {
+        // initializes currentExercise and currentExerciseDuration on the scope
           $scope.currentExercise = exercisePlan;
           $scope.currentExerciseDuration = 0;
 
@@ -78,7 +80,8 @@ angular.module('7minWorkout')
               $scope.pauseWorkout();
           }
       }
-
+// using $interval to call a specfic function continuously at intervals
+// this function decrease currentExerciseDuration after every one second
       var startExerciseTimeTracking = function () {
           var promise = $interval(function () {
               ++$scope.currentExerciseDuration;
