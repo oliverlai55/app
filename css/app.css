@@ -49,6 +49,9 @@ input[type="checkbox"].input-validation-error {
 }
 /* styles for validation helpers - end */
 
+.navbar-brand{
+    padding:5%;
+}
 /*styles for top nav bar - start*/
 .navbar-default.top-navbar {
    /* background-color: #4eaded;*/
