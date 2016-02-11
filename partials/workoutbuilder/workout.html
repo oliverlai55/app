@@ -11,7 +11,7 @@
                 The workout should have at least one exercise!
             </div>
             <div ng-repeat="exercise in workout.exercises" class="exercise-item">
-                <div ng-include="'workout-exercise-tile'"></div>
+                <div id="workout-exercise-tile" ng-include="'workout-exercise-tile'"></div>
             </div>
         </div>
         <div id="workout-data" class="col-sm-3">
