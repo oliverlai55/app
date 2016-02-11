@@ -90,10 +90,18 @@ input[type="checkbox"].input-validation-error {
 .list-group-item-info{
     background:#858C92;
 }
+.list-group-item-info:hover{
+    background:#454A51 !important;
+}
 /*styles for container - start*/
 #exercise-btn{
     margin-right: 8% !important;
     margin-left:2% !important;
+}
+
+#exercise-video{
+    background:#454a51;
+    padding: 2% 3% 4% 4%;
 }
 #workout-btn{
     margin-right: 8% !important;
@@ -276,6 +284,10 @@ div[ng-view].ng-leave-active {
     margin-bottom:10px;
     background:#41464c;
 
+}
+
+.panel-heading{
+    background:#858C92 !important;
 }
 
 .exercise.tile .title {
