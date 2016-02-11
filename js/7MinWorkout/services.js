@@ -1,6 +1,7 @@
 'use strict';
 
 /* Services */
+//max amount of exercises tracked in "workout history"
 angular.module('7minWorkout')
     .factory('workoutHistoryTracker', ['$rootScope', 'appEvents', 'localStorageService', function ($rootScope, appEvents, localStorageService) {
         var maxHistoryItems = 20   //We only track for last 20 exercise
