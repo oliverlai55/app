@@ -108,7 +108,7 @@ angular.module('7minWorkout')
               $scope.pauseResumeToggle();
           }
       };
-
+//this grabs the workout images
       $scope.imageUpdated = function (imageIndex) {
           console.log($scope.exerciseImages[imageIndex]);
       };

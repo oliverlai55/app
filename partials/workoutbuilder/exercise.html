@@ -52,9 +52,9 @@
                 </div>
                 <button ng-click="addVideo()" class="btn btn-primary">Add Video</button>
             </div>
-            <div class="row">
-                <div>
-                    <button class="btn pull-right" ng-class="{'btn-default':formExercise.$valid,'btn-warning':!formExercise.$valid}" ng-click="save()"
+            <div id="exercise-btn" class="row">
+                <div >
+                    <button id="save-btn" class="btn pull-right" ng-class="{'btn-default':formExercise.$valid,'btn-warning':!formExercise.$valid}" ng-click="save()"
                             popover="{{formExercise.$invalid ? 'The form has errors.' : null}}" popover-trigger="mouseenter">Save
                     </button>
                     <button class="btn btn-primary pull-right" ng-click="reset()">Reset</button>

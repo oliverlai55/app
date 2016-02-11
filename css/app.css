@@ -86,7 +86,24 @@ input[type="checkbox"].input-validation-error {
 }
 /*styles for left nav bar - end*/
 
+
+.list-group-item-info{
+    background:#858C92;
+}
 /*styles for container - start*/
+#exercise-btn{
+    margin-right: 8% !important;
+    margin-left:2% !important;
+}
+#workout-btn{
+    margin-right: 8% !important;
+    margin-left:2% !important;
+}
+
+#workout-data{
+    background:#41464c;
+    padding:3% 0 2% 3%;
+}
 .workout-display-div {
     text-align: center;
     padding: 40px;
