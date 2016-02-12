@@ -2,6 +2,6 @@
     .directive('workoutTile', function () {
         return {
             restrict:'EA',
-            templateUrl:'../partials/workoutbuilder/workout-tile.html'
+            templateUrl:'http://oliverlai.com/fitness-app/partials/workoutbuilder/workout-tile.html'
         }
     });
